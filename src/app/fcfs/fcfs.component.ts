@@ -85,6 +85,11 @@ export class FcfsComponent implements OnInit, OnDestroy {
   ];
   displayedColumns: string[] = ['name', 'd1', 'd2', 'total'];
 
+  private timeout1 = 0;
+  private timeout2 = 0;
+  private timeout3 = 0;
+  private timeout4 = 0;
+
   constructor(private schedulingCalculatorService: SchedulingParametersStore) {
   }
 
@@ -99,13 +104,14 @@ export class FcfsComponent implements OnInit, OnDestroy {
   }
 
   newState(event: AnimationEvent): void {
+    console.log('new state', event);
     // @ts-ignore
     if (event.triggerName === 'video1') {
       // @ts-ignore
       if (event.toState === 'getting') {
-        setTimeout(() => {
+        this.timeout1 = setTimeout(() => {
           this.video1 = 'waiting';
-        }, 2499);
+        }, (this.schedulingCalculatorService.BASE_TIME / this.schedulingCalculatorService.lambda) - 10);
       } else { // @ts-ignore
         if (event.toState === 'waiting') {
           if (this.video2 !== 'viewing') {
@@ -113,10 +119,12 @@ export class FcfsComponent implements OnInit, OnDestroy {
           }
         } else { // @ts-ignore
           if (event.toState === 'viewing') {
-            setTimeout(() => {
+            this.timeout2 = setTimeout(() => {
               this.video1 = 'getting';
-              this.video2 = 'viewing';
-            }, 10000);
+              if (this.video2 === 'waiting') {
+                this.video2 = 'viewing';
+              }
+            }, this.schedulingCalculatorService.BASE_TIME * this.schedulingCalculatorService.d1);
           }
         }
       }
@@ -124,9 +132,9 @@ export class FcfsComponent implements OnInit, OnDestroy {
       if (event.triggerName === 'video2') {
         // @ts-ignore
         if (event.toState === 'getting') {
-          setTimeout(() => {
+          this.timeout3 = setTimeout(() => {
             this.video2 = 'waiting';
-          }, 2501);
+          }, (this.schedulingCalculatorService.BASE_TIME / this.schedulingCalculatorService.lambda) + 10);
         } else { // @ts-ignore
           if (event.toState === 'waiting') {
             if (this.video1 !== 'viewing') {
@@ -134,10 +142,12 @@ export class FcfsComponent implements OnInit, OnDestroy {
             }
           } else { // @ts-ignore
             if (event.toState === 'viewing') {
-              setTimeout(() => {
-                this.video1 = 'viewing';
+              this.timeout4 = setTimeout(() => {
+                if (this.video1 === 'waiting') {
+                  this.video1 = 'viewing';
+                }
                 this.video2 = 'getting';
-              }, 6666);
+              }, this.schedulingCalculatorService.BASE_TIME * this.schedulingCalculatorService.d2);
             }
           }
         }
@@ -175,5 +185,12 @@ export class FcfsComponent implements OnInit, OnDestroy {
     this.dataSource[2].d1 = this.dataSource[1].d1 / this.dataSource[0].d1;
     this.dataSource[2].d2 = this.dataSource[1].d2 / this.dataSource[0].d2;
     this.dataSource[2].total = this.dataSource[1].total / this.dataSource[0].total;
+
+    clearTimeout(this.timeout1);
+    clearTimeout(this.timeout2);
+    clearTimeout(this.timeout3);
+    clearTimeout(this.timeout4);
+    this.video1 = 'getting';
+    this.video2 = 'getting';
   }
 }

@@ -13,6 +13,8 @@ export class SchedulingParametersStore {
   d1 = this.DEFAULT_D1;
   d2 = this.DEFAULT_D2;
 
+  BASE_TIME = 10000;
+
   private listeners: Array<(lambda: number, d1: number, d2: number) => void> = [];
 
   setParameters(lambda: number, d1: number, d2: number): void {

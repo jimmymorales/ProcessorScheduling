@@ -19,6 +19,8 @@ export class ParametersComponent implements OnInit {
     this.lambda = this.schedulingCalculatorService.lambda;
     this.d1 = this.schedulingCalculatorService.d1;
     this.d2 = this.schedulingCalculatorService.d2;
+
+    this.schedulingCalculatorService.addListener((lambda, d1, d2) => this.onParametersChanged(lambda, d1, d2));
   }
 
   save(): void {
@@ -28,5 +30,11 @@ export class ParametersComponent implements OnInit {
 
   resetAll(): void {
     this.schedulingCalculatorService.resetParameters();
+  }
+
+  onParametersChanged(lambda: number, d1: number, d2: number): void {
+    this.lambda = lambda;
+    this.d1 = d1;
+    this.d2 = d2;
   }
 }
