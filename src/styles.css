@@ -2,3 +2,36 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+mat-card {
+  margin: 16px;
+}
+
+.policy-card {
+  height: auto;
+}
+
+.vcr {
+  width: 302px;
+  height: 167px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -80px;
+}
+
+.vhs {
+  width: 100px;
+  height: 100px;
+  z-index: 100;
+  left: 0;
+  margin-left: 0;
+  top: 50%;
+  margin-top: -100px;
+  position: absolute;
+}
+
+.card-content {
+  height: 400px;
+  position: relative;
+}
