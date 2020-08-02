@@ -1,15 +1,15 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
+               [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+               [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Políticas</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#">First-Come-First-Served</a>
-      <a mat-list-item href="#">Longest-Job-First</a>
-      <a mat-list-item href="#">Shortest-Job-First</a>
-      <a mat-list-item href="#">Last-Come-First-Served</a>
-      <a mat-list-item href="#">Round-Robin</a>
+      <a mat-list-item routerLink="/fcfs" routerLinkActive="active">First-Come-First-Served</a>
+      <a mat-list-item routerLink="/ljf" routerLinkActive="active">Longest-Job-First</a>
+      <a mat-list-item routerLink="/sjf" routerLinkActive="active">Shortest-Job-First</a>
+      <a mat-list-item routerLink="/lcfs" routerLinkActive="active">Last-Come-First-Served</a>
+      <a mat-list-item routerLink="/rr" routerLinkActive="active">Round-Robin</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -25,5 +25,6 @@
       <span>Processor Scheduling</span>
     </mat-toolbar>
     <!-- Add Content Here -->
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
