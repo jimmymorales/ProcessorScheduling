@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {animate, keyframes, state, style, transition, trigger} from '@angular/animations';
-import {Observable} from 'rxjs';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-fcfs',
@@ -68,43 +67,48 @@ import {Observable} from 'rxjs';
   ]
 })
 export class FcfsComponent implements OnInit {
-  video1 = new Observable(subscriber => {
-    subscriber.next('getting');
-    setTimeout(() => {
-      subscriber.next('waiting');
-      setTimeout(() => {
-        subscriber.next('viewing');
-        setTimeout(() => {
-          subscriber.next('getting');
-          subscriber.complete();
-        }, 5000);
-      }, 5000);
-    }, 5000);
-  });
+  video1 = 'getting';
 
-  video2 = new Observable(subscriber => {
-    subscriber.next('getting');
-    setTimeout(() => {
-      subscriber.next('waiting');
-      setTimeout(() => {
-        subscriber.next('viewing');
-        setTimeout(() => {
-          subscriber.next('getting');
-          subscriber.complete();
-        }, 5000);
-      }, 5000);
-    }, 5000);
-  });
+  video2 = 'getting';
 
   constructor() {
   }
 
   ngOnInit(): void {
-
   }
 
-  runVideo1Cycle(): void {
-
+  newState(event: AnimationEvent): void {
+    console.log(event);
+    if (event.triggerName === 'video1') {
+      if (event.toState === 'getting') {
+        setTimeout(() => {
+          this.video1 = 'waiting';
+        }, 2499);
+      } else if (event.toState === 'waiting') {
+        if (this.video2 !== 'viewing') {
+          this.video1 = 'viewing';
+        }
+      } else if (event.toState === 'viewing') {
+        setTimeout(() => {
+          this.video1 = 'getting';
+          this.video2 = 'viewing';
+        }, 10000);
+      }
+    } else if (event.triggerName === 'video2') {
+      if (event.toState === 'getting') {
+        setTimeout(() => {
+          this.video2 = 'waiting';
+        }, 2501);
+      } else if (event.toState === 'waiting') {
+        if (this.video1 !== 'viewing') {
+          this.video2 = 'viewing';
+        }
+      } else if (event.toState === 'viewing') {
+        setTimeout(() => {
+          this.video1 = 'viewing';
+          this.video2 = 'getting';
+        }, 6666);
+      }
+    }
   }
-
 }
