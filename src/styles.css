@@ -1,7 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 mat-card {
   margin: 16px;
@@ -21,17 +27,45 @@ mat-card {
 }
 
 .vhs {
-  width: 100px;
-  height: 100px;
   z-index: 100;
   left: 0;
   margin-left: 0;
   top: 50%;
   margin-top: -100px;
   position: absolute;
+  padding: 8px;
+}
+
+.vhs img {
+  width: 100px;
+  height: 60px;
+}
+
+.vhs p {
+  text-align: center;
+}
+
+.dark-vhs {
+  background-color: #810b45;
+}
+
+.light-vhs {
+  background-color: #e53e6e;
 }
 
 .card-content {
   height: 400px;
   position: relative;
+}
+
+.getting-title {
+  left: 0;
+  top: 10%;
+  position: absolute;
+}
+
+.waiting-title {
+  left: 40%;
+  top: 10%;
+  position: absolute;
 }

@@ -12,13 +12,13 @@ import {Observable} from 'rxjs';
         left: 0,
         marginLeft: 0,
         top: '50%',
-        marginTop: '-100px',
+        marginTop: '-115px',
       })),
       state('waiting', style({
         left: '50%',
         marginLeft: '-150px',
         top: '50%',
-        marginTop: '-100px',
+        marginTop: '-115px',
       })),
       state('viewing', style({
         left: '100%',

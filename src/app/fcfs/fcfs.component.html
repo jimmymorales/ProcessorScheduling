@@ -3,8 +3,16 @@
     <mat-card-title>First-Come-First-Served (FCFS)</mat-card-title>
   </mat-card-header>
   <mat-card-content class="card-content">
-    <img [@video1]="video1 | async" class="vhs" src="assets/vhs.png">
-    <img [@video2]="video2 | async" class="vhs" src="assets/vhs.png">
+    <h3 class="getting-title">Getting Tape</h3>
+    <h3 class="waiting-title">Waiting...</h3>
+    <div [@video1]="video1 | async" class="vhs dark-vhs">
+      <p>D1</p>
+      <img src="assets/vhs.png">
+    </div>
+    <div [@video2]="video2 | async" class="vhs light-vhs">
+      <p>D2</p>
+      <img src="assets/vhs.png">
+    </div>
     <img class="vcr" src="assets/vcr.png">
   </mat-card-content>
 </mat-card>
