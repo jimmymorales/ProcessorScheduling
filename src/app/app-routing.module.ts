@@ -12,6 +12,7 @@ const routes: Routes = [
   {path: 'sjf', component: SjfComponent},
   {path: 'lcfs', component: LcfsComponent},
   {path: 'rr', component: RrComponent},
+  {path: '', redirectTo: '/fcfs', pathMatch: 'full'},
 ];
 
 @NgModule({

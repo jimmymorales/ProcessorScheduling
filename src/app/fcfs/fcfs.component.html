@@ -3,7 +3,7 @@
     <mat-card-title>First-Come-First-Served (FCFS)</mat-card-title>
   </mat-card-header>
   <mat-card-content class="card-content">
-    <mat-table [dataSource]="data" class="mat-elevation-z8">
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <!-- Position Column -->
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -12,20 +12,20 @@
 
       <!-- Name Column -->
       <ng-container matColumnDef="d1">
-        <mat-header-cell *matHeaderCellDef> D1 </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.d1}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> D1</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.d1 | number:'1.4-4'}} </mat-cell>
       </ng-container>
 
       <!-- Weight Column -->
       <ng-container matColumnDef="d2">
-        <mat-header-cell *matHeaderCellDef> D2 </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.d2}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> D2</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.d2 | number:'1.4-4'}} </mat-cell>
       </ng-container>
 
       <!-- Symbol Column -->
       <ng-container matColumnDef="total">
-        <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.total}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Total</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.total | number:'1.4-4'}} </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

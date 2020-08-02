@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {SchedulingParametersStore} from '../../scheduling-parameters-store.service';
 
 export interface Row {
   name: string;
@@ -73,25 +74,31 @@ export interface Row {
     ])
   ]
 })
-export class FcfsComponent implements OnInit {
+export class FcfsComponent implements OnInit, OnDestroy {
   video1 = 'getting';
   video2 = 'getting';
 
-  data: Row[] = [
-    {name: 'Throughput', d1: 0.5697, d2: 0.5937, total: 1.1634},
-    {name: 'Line Length', d1: 0.8575, d2: 0.8516, total: 1.7091},
-    {name: 'Response Time', d1: 1.5052, d2: 1.4343, total: 1.4691},
+  dataSource: Row[] = [
+    {name: 'Throughput', d1: 0, d2: 0, total: 0},
+    {name: 'Line Length', d1: 0, d2: 0, total: 0},
+    {name: 'Response Time', d1: 0, d2: 0, total: 0},
   ];
   displayedColumns: string[] = ['name', 'd1', 'd2', 'total'];
 
-  constructor() {
+  constructor(private schedulingCalculatorService: SchedulingParametersStore) {
   }
 
   ngOnInit(): void {
+    this.schedulingCalculatorService.addListener((lambda, d1, d2) => this.onParametersChanged(lambda, d1, d2));
+    // tslint:disable-next-line:max-line-length
+    this.onParametersChanged(this.schedulingCalculatorService.lambda, this.schedulingCalculatorService.d1, this.schedulingCalculatorService.d2);
+  }
+
+  ngOnDestroy(): void {
+    this.schedulingCalculatorService.removeListener(this.onParametersChanged);
   }
 
   newState(event: AnimationEvent): void {
-    console.log(event);
     // @ts-ignore
     if (event.triggerName === 'video1') {
       // @ts-ignore
@@ -136,5 +143,37 @@ export class FcfsComponent implements OnInit {
         }
       }
     }
+  }
+
+  onParametersChanged(lambda: number, d1: number, d2: number): void {
+    console.log('parameters changed!');
+
+    const E1 = lambda;
+    const E2 = 1 / d2;
+    const E3 = 1 / d1;
+    // tslint:disable-next-line:max-line-length
+    const pvw = (E1 * E1 * E2 * (2 * E1 + E2)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
+    // tslint:disable-next-line:max-line-length
+    const pvg = (E1 * E3 * E2 * (2 * E1 + E2)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
+    const pgg = (E2 * E3) / (2 * E1 * E1 + E1 * E3 + E1 * E2 + E2 * E3);
+    // tslint:disable-next-line:max-line-length
+    const pgv = (E1 * E2 * E3 * (2 * E1 + E3)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
+    // tslint:disable-next-line:max-line-length
+    const pwv = (E1 * E1 * E3 * (2 * E1 + E3)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
+
+    const u1 = pvw + pvg;
+    const u2 = pgv + pwv;
+
+    this.dataSource[0].d1 = u1 / d1;
+    this.dataSource[0].d2 = u2 / d2;
+    this.dataSource[0].total = this.dataSource[0].d1 + this.dataSource[0].d2;
+
+    this.dataSource[1].d1 = pvw + pvg + pwv;
+    this.dataSource[1].d2 = pvw + pgv + pwv;
+    this.dataSource[1].total = this.dataSource[1].d1 + this.dataSource[1].d2;
+
+    this.dataSource[2].d1 = this.dataSource[1].d1 / this.dataSource[0].d1;
+    this.dataSource[2].d2 = this.dataSource[1].d2 / this.dataSource[0].d2;
+    this.dataSource[2].total = this.dataSource[1].total / this.dataSource[0].total;
   }
 }

@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {SchedulingParametersStore} from '../../scheduling-parameters-store.service';
 
 @Component({
   selector: 'app-parameters',
@@ -7,39 +8,25 @@ import {Component, OnInit} from '@angular/core';
 })
 export class ParametersComponent implements OnInit {
 
-  private DEFAULT_LAMBDA = 4;
-  private DEFAULT_D1 = 1;
-  private DEFAULT_D2 = 0.3333;
+  lambda = 0;
+  d1 = 0;
+  d2 = 0;
 
-  lambda = this.DEFAULT_LAMBDA;
-  d1 = this.DEFAULT_D1;
-  d2 = this.DEFAULT_D2;
-
-  constructor() {
+  constructor(private schedulingCalculatorService: SchedulingParametersStore) {
   }
 
   ngOnInit(): void {
+    this.lambda = this.schedulingCalculatorService.lambda;
+    this.d1 = this.schedulingCalculatorService.d1;
+    this.d2 = this.schedulingCalculatorService.d2;
   }
 
   save(): void {
     console.log('Guardar!');
-  }
-
-  resetLambda(): void {
-    this.lambda = this.DEFAULT_LAMBDA;
-  }
-
-  resetD1(): void {
-    this.d1 = this.DEFAULT_D1;
-  }
-
-  resetD2(): void {
-    this.d2 = this.DEFAULT_D2;
+    this.schedulingCalculatorService.setParameters(this.lambda, this.d1, this.d2);
   }
 
   resetAll(): void {
-    this.resetLambda();
-    this.resetD1();
-    this.resetD2();
+    this.schedulingCalculatorService.resetParameters();
   }
 }
