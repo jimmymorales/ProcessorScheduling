@@ -15,6 +15,12 @@ import {LjfComponent} from './ljf/ljf.component';
 import {LcfsComponent} from './lcfs/lcfs.component';
 import {RrComponent} from './rr/rr.component';
 import {AppRoutingModule} from './app-routing.module';
+import {ParametersComponent} from './parameters/parameters.component';
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {FormsModule} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -23,18 +29,24 @@ import {AppRoutingModule} from './app-routing.module';
     SjfComponent,
     LjfComponent,
     LcfsComponent,
-    RrComponent
+    RrComponent,
+    ParametersComponent
   ],
   imports: [
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
+    FlexLayoutModule,
     LayoutModule,
+    MatCardModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
