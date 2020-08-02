@@ -22,7 +22,7 @@ mat-card {
   height: 167px;
   position: absolute;
   right: 0;
-  top: 50%;
+  top: 70%;
   margin-top: -80px;
 }
 
@@ -54,18 +54,18 @@ mat-card {
 }
 
 .card-content {
-  height: 400px;
+  height: 600px;
   position: relative;
 }
 
 .getting-title {
   left: 0;
-  top: 10%;
+  top: 40%;
   position: absolute;
 }
 
 .waiting-title {
   left: 40%;
-  top: 10%;
+  top: 40%;
   position: absolute;
 }

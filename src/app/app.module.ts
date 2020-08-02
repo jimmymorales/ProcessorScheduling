@@ -21,6 +21,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     FlexLayoutModule,
     LayoutModule,
     MatCardModule,
+    MatTableModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,

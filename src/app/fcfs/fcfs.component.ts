@@ -1,6 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
+export interface Row {
+  name: string;
+  d1: number;
+  d2: number;
+  total: number;
+}
+
 @Component({
   selector: 'app-fcfs',
   templateUrl: './fcfs.component.html',
@@ -10,19 +17,19 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
       state('getting', style({
         left: 0,
         marginLeft: 0,
-        top: '50%',
+        top: '70%',
         marginTop: '-115px',
       })),
       state('waiting', style({
         left: '50%',
         marginLeft: '-150px',
-        top: '50%',
+        top: '70%',
         marginTop: '-115px',
       })),
       state('viewing', style({
         left: '100%',
         marginLeft: '-250px',
-        top: '50%',
+        top: '70%',
         marginTop: '-100px',
       })),
       transition('getting => waiting', [
@@ -39,19 +46,19 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
       state('getting', style({
         left: 0,
         marginLeft: '0',
-        top: '50%',
+        top: '70%',
         marginTop: '0',
       })),
       state('waiting', style({
         left: '50%',
         marginLeft: '-150px',
-        top: '50%',
+        top: '70%',
         marginTop: '0',
       })),
       state('viewing', style({
         left: '100%',
         marginLeft: '-250px',
-        top: '50%',
+        top: '70%',
         marginTop: '-100px',
       })),
       transition('getting => waiting', [
@@ -68,8 +75,14 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 })
 export class FcfsComponent implements OnInit {
   video1 = 'getting';
-
   video2 = 'getting';
+
+  data: Row[] = [
+    {name: 'Throughput', d1: 0.5697, d2: 0.5937, total: 1.1634},
+    {name: 'Line Length', d1: 0.8575, d2: 0.8516, total: 1.7091},
+    {name: 'Response Time', d1: 1.5052, d2: 1.4343, total: 1.4691},
+  ];
+  displayedColumns: string[] = ['name', 'd1', 'd2', 'total'];
 
   constructor() {
   }
