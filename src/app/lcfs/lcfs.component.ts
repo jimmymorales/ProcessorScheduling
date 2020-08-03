@@ -97,6 +97,8 @@ export class LcfsComponent implements OnInit, OnDestroy {
     this.schedulingCalculatorService.addListener((lambda, d1, d2) => this.onParametersChanged(lambda, d1, d2));
     // tslint:disable-next-line:max-line-length
     this.onParametersChanged(this.schedulingCalculatorService.lambda, this.schedulingCalculatorService.d1, this.schedulingCalculatorService.d2);
+
+    this.schedulingCalculatorService.setShowQuantum(false);
   }
 
   ngOnDestroy(): void {

@@ -1,1 +1,46 @@
-<p>rr works!</p>
+<mat-card class="policy-card">
+  <mat-card-header>
+    <mat-card-title>Round Robin (RR)</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="card-content">
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- Position Column -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="d1">
+        <mat-header-cell *matHeaderCellDef> D1</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.d1 | number:'1.4-4'}} </mat-cell>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="d2">
+        <mat-header-cell *matHeaderCellDef> D2</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.d2 | number:'1.4-4'}} </mat-cell>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="total">
+        <mat-header-cell *matHeaderCellDef> Total</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.total | number:'1.4-4'}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <h3 class="getting-title">Obteniendo cinta</h3>
+    <h3 class="waiting-title">Esperando...</h3>
+    <div id="vhs1" *ngIf="!clear1" [@video1]="video1" (@video1.done)="newState($event)" class="vhs dark-vhs">
+      <p>D1</p>
+      <img src="assets/vhs.png">
+    </div>
+    <div id="vhs2" *ngIf="!clear2" [@video2]="video2" (@video2.done)="newState($event)" class="vhs light-vhs">
+      <p>D2</p>
+      <img src="assets/vhs.png">
+    </div>
+    <img class="vcr" src="assets/vcr.png">
+  </mat-card-content>
+</mat-card>
