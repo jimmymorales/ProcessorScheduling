@@ -30,7 +30,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
       transition('getting => waiting', [
         animate('1s')
       ]),
-      transition('waiting => viewing', [
+      transition('waiting <=> viewing', [
         animate('1s')
       ]),
       transition('viewing => getting', [
@@ -59,7 +59,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
       transition('getting => waiting', [
         animate('1s')
       ]),
-      transition('waiting => viewing', [
+      transition('waiting <=> viewing', [
         animate('1s')
       ]),
       transition('viewing => getting', [
@@ -86,6 +86,9 @@ export class RrComponent implements OnInit, OnDestroy {
 
   clear1 = false;
   clear2 = false;
+
+  private quantum1 = 0;
+  private quantum2 = 0;
 
   constructor(private schedulingCalculatorService: SchedulingParametersStore) {
   }
@@ -118,12 +121,34 @@ export class RrComponent implements OnInit, OnDestroy {
           }
         } else { // @ts-ignore
           if (event.toState === 'viewing') {
+            const q = 1 / this.schedulingCalculatorService.quantum;
+            let delay: number;
+            if (this.quantum1 === 0) {
+              if (this.schedulingCalculatorService.d1 <= q) {
+                delay = this.schedulingCalculatorService.d1;
+              } else {
+                delay = q;
+                this.quantum1 = this.schedulingCalculatorService.d1 - q;
+              }
+            } else {
+              if (this.quantum1 <= q) {
+                delay = this.quantum1;
+                this.quantum1 = 0;
+              } else {
+                delay = q;
+                this.quantum1 = this.quantum1 - q;
+              }
+            }
             this.timeout2 = setTimeout(() => {
-              this.video1 = 'getting';
               if (this.video2 === 'waiting') {
                 this.video2 = 'viewing';
               }
-            }, this.schedulingCalculatorService.BASE_TIME * this.schedulingCalculatorService.d1);
+              if (this.quantum1 === 0) {
+                this.video1 = 'getting';
+              } else {
+                this.video1 = 'waiting';
+              }
+            }, this.schedulingCalculatorService.BASE_TIME * delay);
           }
         }
       }
@@ -141,12 +166,34 @@ export class RrComponent implements OnInit, OnDestroy {
             }
           } else { // @ts-ignore
             if (event.toState === 'viewing') {
+              const q = 1 / this.schedulingCalculatorService.quantum;
+              let delay: number;
+              if (this.quantum2 === 0) {
+                if (this.schedulingCalculatorService.d2 <= q) {
+                  delay = this.schedulingCalculatorService.d2;
+                } else {
+                  delay = q;
+                  this.quantum2 = this.schedulingCalculatorService.d2 - q;
+                }
+              } else {
+                if (this.quantum2 <= q) {
+                  delay = this.quantum2;
+                  this.quantum2 = 0;
+                } else {
+                  delay = q;
+                  this.quantum2 = this.quantum2 - q;
+                }
+              }
               this.timeout4 = setTimeout(() => {
                 if (this.video1 === 'waiting') {
                   this.video1 = 'viewing';
                 }
-                this.video2 = 'getting';
-              }, this.schedulingCalculatorService.BASE_TIME * this.schedulingCalculatorService.d2);
+                if (this.quantum2 === 0) {
+                  this.video2 = 'getting';
+                } else {
+                  this.video2 = 'waiting';
+                }
+              }, this.schedulingCalculatorService.BASE_TIME * delay);
             }
           }
         }
@@ -157,28 +204,45 @@ export class RrComponent implements OnInit, OnDestroy {
   onParametersChanged(lambda: number, d1: number, d2: number, quantum: number): void {
     console.log('parameters changed!');
 
-    const E1 = lambda;
-    const E2 = 1 / d2;
-    const E3 = 1 / d1;
-    // tslint:disable-next-line:max-line-length
-    const pvw = (E1 * E1 * E2 * (2 * E1 + E2)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
-    // tslint:disable-next-line:max-line-length
-    const pvg = (E1 * E3 * E2 * (2 * E1 + E2)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
-    const pgg = (E2 * E3) / (2 * E1 * E1 + E1 * E3 + E1 * E2 + E2 * E3);
-    // tslint:disable-next-line:max-line-length
-    const pgv = (E1 * E2 * E3 * (2 * E1 + E3)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
-    // tslint:disable-next-line:max-line-length
-    const pwv = (E1 * E1 * E3 * (2 * E1 + E3)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
+    const q = 1 / quantum;
 
-    const u1 = pvw + pvg;
-    const u2 = pgv + pwv;
+    const E1 = quantum;
+    let E2: number;
+    if (d1 > q) {
+      E2 = 1 / (d1 - q);
+    } else {
+      E2 = 1 / d1;
+    }
+    let E3: number;
+    if (d2 > q) {
+      E3 = 1 / (d2 - q);
+    } else {
+      E3 = 1 / d2;
+    }
+    const E4 = lambda;
+
+    // tslint:disable-next-line:max-line-length
+    const pw1v1 = (E2 * E1 * E4 * E4 * (E4 + E1) * (2 * E4 + E2)) / (2 * (E3 * (E2 + E1) + 2 * E2 * E1) * E4 * E4 * E4 * E4 + (E3 * E3 * (E2 + E1) + E3 * (2 * E2 * E2 + 7 * E2 * E1 + 2 * E1 * E1) + E2 * (3 * E2 + 2 * E1) * E1) * E4 * E4 * E4 + (E3 * E3 * (E2 * E2 + 3 * E2 * E1 + E1 * E1) + E3 * E2 * (5 * E2 + 4 * E1) * E1 + E2 * E2 * E1 * E1) * E4 * E4 + 2 * E3 * (E3 * (E2 * E1) + E2 * E1) * E2 * E1 * E4 + E3 * E3 * E2 * E2 * E1 * E1);
+    // tslint:disable-next-line:max-line-length
+    const pw2v1 = (E2 * E1 * E4 * E4 * (E4 + E2) * (2 * E4 + E3)) / (2 * (E3 * (E2 + E1) + 2 * E2 * E1) * E4 * E4 * E4 * E4 + (E3 * E3 * (E2 + E1) + E3 * (2 * E2 * E2 + 7 * E2 * E1 + 2 * E1 * E1) + E2 * (3 * E2 + 2 * E1) * E1) * E4 * E4 * E4 + (E3 * E3 * (E2 * E2 + 3 * E2 * E1 + E1 * E1) + E3 * E2 * (5 * E2 + 4 * E1) * E1 + E2 * E2 * E1 * E1) * E4 * E4 + 2 * E3 * (E3 * (E2 * E1) + E2 * E1) * E2 * E1 * E4 + E3 * E3 * E2 * E2 * E1 * E1);
+    const pv1g = E3 / E4 * pw2v1;
+    const pv1w1 = E3 / E1 * pw2v1;
+    const pgv1 = E3 / E4 * pw1v1;
+    // tslint:disable-next-line:max-line-length
+    const pgg = (E2 * E1 * E3 * (E4 + E1) * ((E3 + E2) * E4 + E3 * E2)) / (2 * (E3 * (E2 + E1) + 2 * E2 * E1) * E4 * E4 * E4 * E4 + (E3 * E3 * (E2 + E1) + E3 * (2 * E2 * E2 + 7 * E2 * E1 + 2 * E1 * E1) + E2 * (3 * E2 + 2 * E1) * E1) * E4 * E4 * E4 + (E3 * E3 * (E2 * E2 + 3 * E2 * E1 + E1 * E1) + E3 * E2 * (5 * E2 + 4 * E1) * E1 + E2 * E2 * E1 * E1) * E4 * E4 + 2 * E3 * (E3 * (E2 * E1) + E2 * E1) * E2 * E1 * E4 + E3 * E3 * E2 * E2 * E1 * E1);
+    // tslint:disable-next-line:max-line-length
+    const pv2w1 = (E3 * E1 * E4 * E4 * (E4 + E1) * (2 * E4 + E3)) / (2 * (E3 * (E2 + E1) + 2 * E2 * E1) * E4 * E4 * E4 * E4 + (E3 * E3 * (E2 + E1) + E3 * (2 * E2 * E2 + 7 * E2 * E1 + 2 * E1 * E1) + E2 * (3 * E2 + 2 * E1) * E1) * E4 * E4 * E4 + (E3 * E3 * (E2 * E2 + 3 * E2 * E1 + E1 * E1) + E3 * E2 * (5 * E2 + 4 * E1) * E1 + E2 * E2 * E1 * E1) * E4 * E4 + 2 * E3 * (E3 * (E2 * E1) + E2 * E1) * E2 * E1 * E4 + E3 * E3 * E2 * E2 * E1 * E1);
+    const pv2g = E2 / E4 * pv2w1;
+
+    const u1 = pv1g + pv1w1 + pv2w1 + pv2g;
+    const u2 = pw1v1 + pgv1 + pw2v1;
 
     this.dataSource[0].d1 = u1 / d1;
     this.dataSource[0].d2 = u2 / d2;
     this.dataSource[0].total = this.dataSource[0].d1 + this.dataSource[0].d2;
 
-    this.dataSource[1].d1 = pvw + pvg + pwv;
-    this.dataSource[1].d2 = pvw + pgv + pwv;
+    this.dataSource[1].d1 = pw1v1 + pv1g + pv1w1 + pv2w1 + pv2g + pw2v1;
+    this.dataSource[1].d2 = pw1v1 + pv1w1 + pgv1 + pv2w1 + pw2v1;
     this.dataSource[1].total = this.dataSource[1].d1 + this.dataSource[1].d2;
 
     this.dataSource[2].d1 = this.dataSource[1].d1 / this.dataSource[0].d1;
