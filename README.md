@@ -1,27 +1,21 @@
-# SchedulingSimulation
+# Processor Scheduling Simulation
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.5.
+Este simulador es parte del proyecto del curso de Analisis de Rendimiento del Posgrado en Redes de la [Universidad Galileo](https://www.galileo.edu/).
 
-## Development server
+Las politicas implementadas en este simulador estan basadas en el capitulo 3 (Processor Scheduling) del libro [P.S. to Operating Systems](https://www.amazon.com/P-S-Operating-Systems-Larry-Dowdy/dp/0130116858).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Pueden ver una demostracion en vivo en [processorscheduling.web.app](https://processorscheduling.web.app/fcfs).
 
-## Code scaffolding
+![Demo](screenshots/demo.gif)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Desarrollo
 
-## Build
+Para correr el simulador en tu computadora, puedes clonar este repositorio. Necesitas tener la ultima version instalada de [NodeJS](https://nodejs.org/en/download/).
+``` bash
+npm install     # install dependencias
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+npm run start   # inicia un servidor de desarrollo
+```
 
-## Running unit tests
+Navega a `http://localhost:4200/`. La aplicaction automaticamente recargara cuando realices un cambio en los archivos fuente.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
