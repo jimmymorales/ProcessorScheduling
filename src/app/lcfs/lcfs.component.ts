@@ -122,7 +122,8 @@ export class LcfsComponent implements OnInit, OnDestroy {
             }
             this.video1 = 'viewing';
           } else {
-            this.rollback1 = true;
+            clearTimeout(this.timeout2);
+            this.rollback1 = false;
           }
         } else { // @ts-ignore
           if (event.toState === 'viewing') {
@@ -152,7 +153,8 @@ export class LcfsComponent implements OnInit, OnDestroy {
               }
               this.video2 = 'viewing';
             } else {
-              this.rollback2 = true;
+              clearTimeout(this.timeout4);
+              this.rollback2 = false;
             }
           } else { // @ts-ignore
             if (event.toState === 'viewing') {
@@ -175,15 +177,11 @@ export class LcfsComponent implements OnInit, OnDestroy {
     const E1 = lambda;
     const E2 = 1 / d2;
     const E3 = 1 / d1;
-    // tslint:disable-next-line:max-line-length
-    const pvw = (E1 * E1 * E2 * (2 * E1 + E2)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
-    // tslint:disable-next-line:max-line-length
-    const pvg = (E1 * E3 * E2 * (2 * E1 + E2)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
-    const pgg = (E2 * E3) / (2 * E1 * E1 + E1 * E3 + E1 * E2 + E2 * E3);
-    // tslint:disable-next-line:max-line-length
-    const pgv = (E1 * E2 * E3 * (2 * E1 + E3)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
-    // tslint:disable-next-line:max-line-length
-    const pwv = (E1 * E1 * E3 * (2 * E1 + E3)) / (2 * (E1 * E1 * E1) * E3 + 2 * (E1 * E1 * E1) * E2 + E1 * E1 * E3 * E3 + 4 * (E1 * E1) * E2 * E3 + E1 * E1 * E2 * E2 + 2 * E1 * E3 * E3 * E2 + 2 * E1 * E3 * E2 * E2 + E2 * E2 * E3 * E3);
+    const pwv = (E1 * E1) / (2 * E1 * E1 + E1 * E3 + E1 * E2 + E2 * E3);
+    const pvw = pwv;
+    const pvg = (E1 * E2) / (2 * E1 * E1 + E1 * E3 + E1 * E2 + E2 * E3);
+    const pgg = (E1 * E1) / (2 * E1 * E1 + E1 * E3 + E1 * E2 + E2 * E3);
+    const pgv = (E1 * E3) / (2 * E1 * E1 + E1 * E3 + E1 * E2 + E2 * E3);
 
     const u1 = pvw + pvg;
     const u2 = pgv + pwv;
