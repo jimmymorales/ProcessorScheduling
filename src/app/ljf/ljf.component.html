@@ -33,11 +33,11 @@
     </mat-table>
     <h3 class="getting-title">Obteniendo cinta</h3>
     <h3 class="waiting-title">Esperando...</h3>
-    <div id="vhs1" [@video1]="video1" (@video1.done)="newState($event)" class="vhs dark-vhs">
+    <div id="vhs1" *ngIf="!clear1" [@video1]="video1" (@video1.done)="newState($event)" class="vhs dark-vhs">
       <p>D1</p>
       <img src="assets/vhs.png">
     </div>
-    <div id="vhs2" [@video2]="video2" (@video2.done)="newState($event)" class="vhs light-vhs">
+    <div id="vhs2" *ngIf="!clear2" [@video2]="video2" (@video2.done)="newState($event)" class="vhs light-vhs">
       <p>D2</p>
       <img src="assets/vhs.png">
     </div>

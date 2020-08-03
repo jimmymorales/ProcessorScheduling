@@ -90,6 +90,9 @@ export class FcfsComponent implements OnInit, OnDestroy {
   private timeout3 = 0;
   private timeout4 = 0;
 
+  clear1 = false;
+  clear2 = false;
+
   constructor(private schedulingCalculatorService: SchedulingParametersStore) {
   }
 
@@ -190,7 +193,15 @@ export class FcfsComponent implements OnInit, OnDestroy {
     clearTimeout(this.timeout2);
     clearTimeout(this.timeout3);
     clearTimeout(this.timeout4);
-    this.video1 = 'getting';
-    this.video2 = 'getting';
+
+    this.clear1 = true;
+    this.clear2 = true;
+
+    setTimeout(() => {
+      this.clear1 = false;
+      this.clear2 = false;
+      this.video1 = 'getting';
+      this.video2 = 'getting';
+    }, 500);
   }
 }
